@@ -1,0 +1,24 @@
+<!DOCTYPE html lang="en">
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+    
+</head>
+<body>
+    <div class="card">
+        <div class="lock">🔒<div>
+        <h1>Password Manager</h1>
+        <p class="subtitle">Enter your master password</p>
+        <form method="POST">
+            <input type="password" id="password"
+            name="password" autofocus autocomplete="current-password" required>
+            {% if error %}
+                <p class="error">{{ error }}</p>
+            {% endif %}
+            <button type="submit">Login</button>
+        </form>
+    </div>
+</body>
+</html>

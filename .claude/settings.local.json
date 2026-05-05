@@ -1,0 +1,10 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(curl -s -X POST http://127.0.0.1:5000/add -d \"website=amazon&username=alex.smith&password=Am%40z0n%21Buy99&url=https://amazon.com\")",
+      "Bash(curl -s -X POST http://127.0.0.1:5000/add -d \"website=twitter&username=mike_wilson&password=Tw1tt3r%23Bird%21&url=https://twitter.com\")",
+      "Bash(curl -s http://127.0.0.1:5000/)",
+      "Bash(curl -s http://127.0.0.1:5000/website/github)"
+    ]
+  }
+}

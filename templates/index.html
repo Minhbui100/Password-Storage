@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Password Manager</title>
+ 
+</head>
+<body>
+
+<div class="container">
+    <header>
+        <div>
+            <h1>Password Manager</h1>
+            <p> Store and manage your account credentials.</p>
+        </div>
+        <form action="/logout" method="POST">
+            <button class="btn-logout" type="submit">Log out</button>
+        </form>
+    </header>
+
+
+    <div class="form-card">
+        <h2>Add Account</h2>
+        <form id="accountForm">
+            <div class="form-grid">
+                <div class="form-field">
+                    <lable>Website</lable>
+                    <input name="website" placeholder="e.g. Netflix" required/>
+                </div>
+                <div class="form-field">
+                    <lable>Username</lable>
+                    <input name="username" placeholder="e.g. john_doe" required/>
+                </div>
+                <div class="form-field">
+                    <lable>Password</lable>
+                    <input id="passwordInput" name="password" type="password" placeholder="********" required/>
+                    <button type="button" class="btn-generate" id="generateBtn">Generate strong password</button>
+                </div>
+                <div class="form-field">
+                    <lable>Website URL</lable>
+                    <input name="url" placeholder="e.g. https://www.netflix.com" required/>
+                </div>
+            </div>
+            <button type="submit" class="btn-submit">Add Account</button>
+        </form>
+    </div>
+
+    <div class="section-title">Websites</div>
+        {% for site in websites %}
+            <a class="site-card" href="/website/{{site}}">{{site}}</a>
+        {% else %}
+            <p class="empty-state">No websites added yet.</p>
+        {% endfor %}
+</div>
+
+<script>
+    document.getElementById("accountForm").addEventListener("submit", async function (e){
+        e.preventDefault();
+        const formData=new FormData(this);
+        const response=await fetch("/add", {method:"POST", body:formData});
+        const data=await response.json();
+        if (!response.ok){
+            alert(data.error);
+        } else{
+            window.location.href="/";
+        }
+    });
+
+    document.getElementById("generateBtn").addEventListener("click", function(){
+        const chars="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*()_+";
+        let password="";
+        for (let i=0; i<16; i++){
+            password+=chars.charAt(Math.floor(Math.random()*chars.length));
+        }
+        const input=document.getElementById("passwordInput");
+        input.value=password;
+        input.type="text";
+        setTimeout(() => {
+            input.type="password";
+        }, 2000);
+    });
+</script>
+
+</body>
+</html>

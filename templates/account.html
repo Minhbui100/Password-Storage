@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Username - Password Manager</title>
+</head>
+<body>
+<div class="container">
+    <header>
+        <a href="/">&larr; All websites</a>
+        <h1>{{website}}</h1>
+    </header>
+    <div class="card">
+        {% if accounts %}
+        <table>
+            <thead>
+                <tr>
+                    <th>Username</th>
+                    <th>Password</th>
+                    <th>Website link</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for account in accounts %}
+                <tr>
+                    <td>{{account.username}}</td>
+                    <td>{{account.password}}</td>
+                    <td><a href="{{account.url}}" target="_blank">{{account.url}}</a></td>
+                    <td class="actions-cell">
+                        <button class="btn btn-edit edit-btn"
+                        data-id="{{account.id}}"
+                        data-website="{{account.website}}"
+                        data-username="{{account.username}}"
+                        data-password="{{account.password}}"
+                        data-url="{{account.url}}">Edit</button>
+                        <form action="/delete/{{account.id}}" method="POST" style="display:inline"
+                        onsubmit="return confirm('Are you sure you want to delete this account?');">
+                            <button class="btn btn-delete" type="submit">Delete</button>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        {% else %}
+        <div class="empty-state"> No accounts found for {{website}}</div>
+        {% endif %}
+    </div>
+</div>
+</body>
+</html>
