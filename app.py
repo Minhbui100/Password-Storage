@@ -103,7 +103,45 @@ def get_accounts(website):
         return jsonify({"error": "Error fetching accounts"}), 500
 
 
-
+@app.route("/delete/<account_id>", methods=["POST"])
+@login_required
+def delete_account(account_id):
+    try:
+        conn=get_db_connection()
+        cur=conn.cursor()
+        cur.execute("select website from account where id=%s", (account_id,))
+        row=cur.fetchone()
+        if not row:
+            return jsonify({"error": "Account not found"}), 404
+        website=row[0]
+        cur.execute("delete from account where id=%s", (account_id,))
+        conn.commit()
+        cur.close()
+        conn.close()
+        return redirect(url_for("get_accounts", website=website))
+    except Exception as e:
+        print(e)
+        return jsonify({"error": "Error deleting account"}), 500
+    
+@app.route("/edit/<account_id>", methods=["POST"])
+@login_required
+def edit_account(account_id):
+    try:
+        conn=get_db_connection()
+        cur=conn.cursor()
+        cur.execute("update account set website=%s, username=%s, password=%s, url=%s where id=%s",
+                    (request.form["website"].lower(), request.form["username"].lower(), request.form["password"], request.form["url"], account_id))
+        conn.commit()
+        cur.close()
+        conn.close()
+        return jsonify({"redirect": url_for("get_accounts", website=request.form["website"].lower())})
+    except IntegrityError:
+        conn.rollback()
+        
+        return jsonify({"error": f"Account {request.form['username']} already exists for website {request.form['website']}"}), 400
+    except Exception as e:
+        print(e)
+        return jsonify({"error": "Error editing account"}), 500
 
 if __name__=="__main__":
     app.run(debug=True)
