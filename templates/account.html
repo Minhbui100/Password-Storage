@@ -3,9 +3,168 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Username - Password Manager</title>
+    <title>{{ website }} - Accounts</title>
     <style>
-        
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            background: #f0f2f5;
+            color: #1a1a2e;
+            min-height: 100vh;
+            padding: 40px 20px;
+        }
+
+        .container {
+            max-width: 720px;
+            margin: 0 auto;
+        }
+
+        header {
+            margin-bottom: 28px;
+        }
+
+        header a {
+            font-size: 13px;
+            color: #6b7280;
+            text-decoration: none;
+        }
+        header a:hover { color: #4f46e5; }
+
+        h1 {
+            font-size: 26px;
+            font-weight: 700;
+            color: #1a1a2e;
+            margin-top: 8px;
+            text-transform: capitalize;
+        }
+
+        .card {
+            background: #ffffff;
+            border-radius: 12px;
+            box-shadow: 0 1px 4px rgba(0,0,0,0.08);
+            overflow: hidden;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        thead th {
+            background: #f8f9fb;
+            padding: 12px 20px;
+            text-align: left;
+            font-size: 12px;
+            font-weight: 600;
+            color: #6b7280;
+            text-transform: uppercase;
+            letter-spacing: .05em;
+            border-bottom: 1px solid #e5e7eb;
+        }
+
+        tbody tr {
+            border-bottom: 1px solid #f0f2f5;
+            transition: background 0.15s;
+        }
+        tbody tr:last-child { border-bottom: none; }
+        tbody tr:hover { background: #fafbff; }
+
+        td {
+            padding: 14px 20px;
+            font-size: 14px;
+            color: #374151;
+        }
+
+        .password-cell {
+            font-family: "Courier New", monospace;
+            letter-spacing: .04em;
+            max-width: 160px;
+        }
+
+        .password-wrap {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            max-width: 100%;
+        }
+
+        .password-text {
+            font-family: "Courier New", monospace;
+            letter-spacing: .04em;
+            word-break: break-all;
+            min-width: 0;
+            flex: 1 1 0;
+        }
+
+        .btn-icon {
+            padding: 4px 7px;
+            background: #f3f4f6;
+            color: #6b7280;
+            border: none;
+            border-radius: 5px;
+            font-size: 12px;
+            cursor: pointer;
+            transition: background 0.15s, color 0.15s;
+            line-height: 1;
+        }
+        .btn-icon:hover { background: #e5e7eb; color: #374151; }
+
+        .btn-copied {
+            background: #dcfce7 !important;
+            color: #16a34a !important;
+        }
+
+        .actions-cell {
+            white-space: nowrap;
+            text-align: right;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            padding: 6px 14px;
+            border: none;
+            border-radius: 6px;
+            font-size: 13px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: opacity 0.15s, transform 0.1s;
+        }
+        .btn:hover { opacity: 0.85; transform: translateY(-1px); }
+        .btn:active { transform: translateY(0); }
+
+        .btn-edit {
+            background: #eff6ff;
+            color: #2563eb;
+        }
+
+        .btn-delete {
+            background: #fef2f2;
+            color: #dc2626;
+        }
+
+        .url-cell {
+            max-width: 180px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+        .url-cell a {
+            color: #4f46e5;
+            text-decoration: none;
+            font-size: 13px;
+        }
+        .url-cell a:hover { text-decoration: underline; }
+
+        .empty-state {
+            padding: 48px 20px;
+            text-align: center;
+            color: #9ca3af;
+            font-size: 14px;
+        }
+
         /* Modal */
         .modal-overlay {
             display: none;
@@ -120,17 +279,23 @@
                 {% for account in accounts %}
                 <tr>
                     <td>{{account.username}}</td>
-                    <td>{{account.password}}</td>
-                    <td><a href="{{account.url}}" target="_blank">{{account.url}}</a></td>
+                    <td class="password-cell">
+                        <div class="password-wrap">
+                            <span class="password-text" data-password="{{ account.password }}">••••••••</span>
+                            <button class="btn-icon toggle-btn" title="Show/hide">👁</button>
+                            <button class="btn-icon copy-btn" title="Copy">⎘</button>
+                        </div>
+                    </td>
+                    <td class="url-cell"><a href="{{account.url}}" target="_blank">{{account.url}}</a></td>
                     <td class="actions-cell">
                         <button class="btn btn-edit edit-btn"
-                        data-id="{{account.id}}"
-                        data-website="{{account.website}}"
-                        data-username="{{account.username}}"
-                        data-password="{{account.password}}"
-                        data-url="{{account.url}}">Edit</button>
+                            data-id="{{account.id}}"
+                            data-website="{{account.website}}"
+                            data-username="{{account.username}}"
+                            data-password="{{account.password}}"
+                            data-url="{{account.url}}">Edit</button>
                         <form action="/delete/{{account.id}}" method="POST" style="display:inline"
-                        onsubmit="return confirm('Are you sure you want to delete this account?');">
+                            onsubmit="return confirm('Are you sure you want to delete this account?');">
                             <button class="btn btn-delete" type="submit">Delete</button>
                         </form>
                     </td>
@@ -217,6 +382,34 @@
     function closeEdit(){
         document.getElementById("editModal").classList.remove("open");
     }
+
+    document.querySelectorAll(".toggle-btn").forEach(function(btn) {
+        btn.addEventListener("click", function() {
+            var span = btn.previousElementSibling;
+            var pw = span.dataset.password;
+            if (span.textContent === "••••••••") {
+                span.textContent = pw;
+                btn.title = "Hide";
+            } else {
+                span.textContent = "••••••••";
+                btn.title = "Show";
+            }
+        });
+    });
+
+    document.querySelectorAll(".copy-btn").forEach(function(btn) {
+        btn.addEventListener("click", function() {
+            var span = btn.parentElement.querySelector(".password-text");
+            navigator.clipboard.writeText(span.dataset.password).then(function() {
+                btn.textContent = "✓";
+                btn.classList.add("btn-copied");
+                setTimeout(function() {
+                    btn.textContent = "⎘";
+                    btn.classList.remove("btn-copied");
+                }, 1500);
+            });
+        });
+    });
 
 
 

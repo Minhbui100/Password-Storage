@@ -4,6 +4,186 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Password Manager</title>
+    <style>
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            background: #f0f2f5;
+            color: #1a1a2e;
+            min-height: 100vh;
+            padding: 40px 20px;
+        }
+
+        .container {
+            max-width: 720px;
+            margin: 0 auto;
+        }
+
+        header {
+            margin-bottom: 32px;
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+        }
+
+        header h1 {
+            font-size: 28px;
+            font-weight: 700;
+            color: #1a1a2e;
+        }
+
+        header p {
+            font-size: 14px;
+            color: #6b7280;
+            margin-top: 4px;
+        }
+
+        .btn-logout {
+            padding: 7px 16px;
+            background: #f3f4f6;
+            color: #374151;
+            border: none;
+            border-radius: 8px;
+            font-size: 13px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background 0.15s;
+            white-space: nowrap;
+        }
+        .btn-logout:hover { background: #e5e7eb; }
+
+        /* Add account form */
+        .form-card {
+            background: #fff;
+            border-radius: 12px;
+            box-shadow: 0 1px 4px rgba(0,0,0,0.08);
+            padding: 24px 28px;
+            margin-bottom: 32px;
+        }
+
+        .form-card h2 {
+            font-size: 15px;
+            font-weight: 600;
+            color: #374151;
+            margin-bottom: 16px;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+        }
+
+        .form-field {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+
+        .form-field label {
+            font-size: 11px;
+            font-weight: 600;
+            color: #6b7280;
+            text-transform: uppercase;
+            letter-spacing: .05em;
+        }
+
+        .form-field input {
+            padding: 9px 12px;
+            border: 1px solid #d1d5db;
+            border-radius: 8px;
+            font-size: 14px;
+            color: #1a1a2e;
+            outline: none;
+            transition: border-color 0.15s, box-shadow 0.15s;
+        }
+
+        .form-field input:focus {
+            border-color: #6366f1;
+            box-shadow: 0 0 0 3px rgba(99,102,241,0.15);
+        }
+
+        .form-field input::placeholder { color: #9ca3af; }
+
+        .btn-generate {
+            align-self: flex-start;
+            padding: 0;
+            background: none;
+            border: none;
+            font-size: 11px;
+            color: #6366f1;
+            cursor: pointer;
+            font-weight: 500;
+            transition: color 0.15s;
+        }
+        .btn-generate:hover { color: #4f46e5; text-decoration: underline; }
+
+        .form-footer {
+            margin-top: 16px;
+            display: flex;
+            justify-content: flex-end;
+        }
+
+        .btn-add {
+            padding: 9px 28px;
+            background: #4f46e5;
+            color: #fff;
+            border: none;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: opacity 0.15s, transform 0.1s;
+        }
+        .btn-add:hover { opacity: 0.88; transform: translateY(-1px); }
+        .btn-add:active { transform: translateY(0); }
+
+        @media (max-width: 500px) {
+            .form-grid { grid-template-columns: 1fr; }
+        }
+
+        /* Websites grid */
+        .section-title {
+            font-size: 13px;
+            font-weight: 600;
+            color: #6b7280;
+            text-transform: uppercase;
+            letter-spacing: .06em;
+            margin-bottom: 14px;
+        }
+
+        .site-card {
+            background: #fff;
+            border-radius: 10px;
+            box-shadow: 0 1px 4px rgba(0,0,0,0.07);
+            padding: 20px 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            text-decoration: none;
+            color: #1a1a2e;
+            font-size: 14px;
+            font-weight: 600;
+            text-transform: capitalize;
+            transition: box-shadow 0.15s, transform 0.15s, background 0.15s;
+            min-height: 80px;
+        }
+
+        .site-card:hover {
+            box-shadow: 0 4px 16px rgba(79,70,229,0.15);
+            transform: translateY(-2px);
+            background: #fafbff;
+            color: #4f46e5;
+        }
+
+        .empty-state {
+            color: #9ca3af;
+            font-size: 14px;
+            padding: 12px 0;
+        }
+    </style>
  
 </head>
 <body>
@@ -30,7 +210,7 @@
                 </div>
                 <div class="form-field">
                     <lable>Username</lable>
-                    <input name="username" placeholder="e.g. john_doe" required/>
+                    <input name="username" placeholder="e.g. jimmy@gmail.com" required/>
                 </div>
                 <div class="form-field">
                     <lable>Password</lable>
@@ -42,7 +222,9 @@
                     <input name="url" placeholder="e.g. https://www.netflix.com"/>
                 </div>
             </div>
-            <button type="submit" class="btn-submit">Add Account</button>
+            <div class="form-footer">
+                <button type="submit" class="btn-add">Add Account</button>
+            </div>
         </form>
     </div>
 

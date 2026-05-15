@@ -1,13 +1,31 @@
-from config import master_password, secret_key, db_host, db_port, db_name, db_user, db_password
+from config import master_password, secret_key, db_host, db_port, db_name, db_user, db_password, salt
 from flask import Flask, request, jsonify, render_template, redirect, url_for, session
 import hmac
 from functools import wraps
 import psycopg2
 from psycopg2 import IntegrityError
 
+from cryptography.fernet import Fernet
+from cryptography.hazmat.primitives.kdf.pbkdf2 import PBKDF2HMAC
+from cryptography.hazmat.primitives import hashes
+import base64
 
 app=Flask(__name__)
 app.secret_key=secret_key
+
+def _make_fernet():
+    kdf=PBKDF2HMAC(algorithm=hashes.SHA256(), length=32, salt=salt, iterations=480000)
+    key=base64.urlsafe_b64encode(kdf.derive(master_password.encode()))
+    return Fernet(key)
+
+fernet = _make_fernet()
+
+def encrypt(plaintext):
+    return fernet.encrypt(plaintext.encode()).decode()
+
+def decrypt(token):
+    return fernet.decrypt(token.encode()).decode()
+
 
 def get_db_connection():
     return psycopg2.connect(

@@ -8,3 +8,4 @@ db_password=os.getenv("db_password", "postgres")
 
 master_password=os.getenv("master_password", "admin")
 secret_key=os.getenv("secret_key", "secret")
+salt=os.getenv("SALT", "passwordstorage-salt-2024").encode()
